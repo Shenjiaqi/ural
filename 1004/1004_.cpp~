@@ -1,0 +1,81 @@
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <cmath>
+#include <map>
+#include <fstream>
+#include <cassert>
+#include <set>
+#include <queue>
+#include <iostream>
+#include <utility>
+#include <stack>
+#include <complex>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <list>
+#include <functional>
+#include <cctype>
+using namespace std;
+typedef long long ll;
+typedef pair<int,int> ppi;
+typedef pair<ll,ll> ppl;
+typedef pair<int,int> pp;
+#define FOR(a,b,c) for(int a=(b);a<(c);++a)
+#define FR(a,b) for(typeof(b.begin()) a=b.begin();a!=b.end();++a)
+#define N 101
+int p[N][N][3];
+int frm[N][N][3][3];
+void pt(int f,int t,int c)
+{
+  int tmp=frm[f][t][c][0];
+  cout<<"!"<<tmp<<endl;
+  if(tmp==0)
+    printf("%d ",f);
+  else pt(f,tmp,frm[f][t][c][1]),pt(tmp,t,frm[f][t][c][2]);
+}
+int main()
+{
+  for(int n,m,cnt=0;2==scanf("%d%d",&n,&m);++cnt)
+    {
+      memset(p,1<<6,sizeof(p));
+      memset(frm,0,sizeof(frm));
+      int inf=p[0][0][0];
+      FOR(i,0,m)
+	{
+	  int a,b,l;
+	  scanf("%d%d%d",&a,&b,&l);
+	  p[a][b][0]=p[b][a][0]=min(p[b][a][0],l);
+	}
+      FOR(k,1,n+1)
+	FOR(i,1,n+1)
+	if(k!=i)
+	  FOR(a,0,3)
+	    if(p[i][k][a]<inf)
+	      FOR(j,1,n+1)
+		if(k!=j)
+		  FOR(b,0,3)
+		    if(p[k][j][b]<inf)
+		      {
+			int tmp=p[i][k][a]+p[k][j][b];
+			int to=min(2,a+b+2-1);
+			if(p[i][j][to]>tmp)
+			  p[i][j][to]=tmp,
+			    frm[i][j][to][0]=k,
+			    frm[i][j][to][1]=a,
+			    frm[i][j][to][2]=b;
+		      }
+      int ans=1;
+      FOR(i,2,n+1)
+	if(p[i][i][2]<p[ans][ans][2])
+	  ans=i;
+      cout<<endl<<"!"<<ans<<' '<<p[ans][ans][2]<<' '<<frm[ans][ans][2][0]<<endl;
+      if(cnt)
+	printf("\n");
+      if(p[ans][ans][2]==inf)
+	printf("No solution.");
+      else pt(ans,ans,2);
+    }
+  return 0;
+}
