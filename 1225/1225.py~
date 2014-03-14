@@ -1,0 +1,3 @@
+n = input()
+dp = [ 0 for x in xrange(n) ]
+for
