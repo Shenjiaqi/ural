@@ -1,0 +1,3 @@
+n = input()
+count = [ 0 for i in xrange(n) ]
+a, b, c = input().split()
